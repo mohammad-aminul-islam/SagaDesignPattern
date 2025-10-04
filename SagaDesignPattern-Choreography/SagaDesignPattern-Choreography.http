@@ -1,0 +1,6 @@
+@SagaDesignPattern_Choreography_HostAddress = http://localhost:5222
+
+GET {{SagaDesignPattern_Choreography_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
