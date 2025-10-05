@@ -1,8 +1,8 @@
-﻿using MassTransit;
+﻿using CommonService.RabbitMQ.Shared.Model.PaymentFailed;
+using MassTransit;
 using MediatR;
 using OrderService.Application.Commands;
 using OrderService.Domain.Enums;
-using OrderService.Domain.Events;
 
 namespace OrderService.Application.Consumers;
 

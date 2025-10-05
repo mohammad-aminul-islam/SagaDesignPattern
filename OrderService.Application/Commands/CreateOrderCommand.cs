@@ -1,7 +1,7 @@
-﻿using MediatR;
+﻿using CommonService.RabbitMQ.Shared.Model.OrderCreated;
+using MediatR;
 using Microsoft.Extensions.Logging;
 using OrderService.Application.Interfaces;
-using OrderService.Domain.Events;
 using OrderService.Domain.Models;
 
 

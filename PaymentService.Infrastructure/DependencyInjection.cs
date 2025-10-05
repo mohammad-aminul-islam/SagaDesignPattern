@@ -2,12 +2,12 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using OrderService.Application.Consumers;
-using OrderService.Application.Interfaces;
-using OrderService.Infrastructure.Messaging;
-using OrderService.Infrastructure.Repositories;
+using PaymentService.Application.Consumers;
+using PaymentService.Application.Interfaces;
+using PaymentService.Infrastructure.Messaging;
+using PaymentService.Infrastructure.Repositories;
 
-namespace OrderService.Infrastructure;
+namespace PaymentService.Infrastructure;
 
 public static class DependencyInjection
 {
@@ -16,17 +16,17 @@ public static class DependencyInjection
     {
         var connectionString = configuration.GetConnectionString("PostgreSqlConnection");
 
-        services.AddDbContext<OrderDbContext>(options =>
+        services.AddDbContext<PaymentDbContext>(options =>
             options.UseNpgsql(connectionString));
 
-        services.AddScoped<IOrderRepository, OrderRepository>();
+        services.AddScoped<IPaymentRepository, PaymentRepository>();
         services.AddScoped<IEventPublisher, MassTransitEventPublisher>();
 
         // MassTransit with RabbitMQ
         services.AddMassTransit(x =>
         {
             // Add consumers here if this service consumes any events
-             x.AddConsumer<PaymentFailedConsumer>();
+             x.AddConsumer<OrderCreatedConsumer>();
 
             x.UsingRabbitMq((context, cfg) =>
             {
@@ -36,11 +36,11 @@ public static class DependencyInjection
                     h.Password(configuration["RabbitMq:Password"]);
                 });
 
-                cfg.ReceiveEndpoint("payment_failed_queue", e =>
+                cfg.ReceiveEndpoint("order_created_queue", e =>
                 {
-                    e.ConfigureConsumer<PaymentFailedConsumer>(context);
+                    e.ConfigureConsumer<OrderCreatedConsumer>(context);
                 });
-              
+               
             });
         });
 
