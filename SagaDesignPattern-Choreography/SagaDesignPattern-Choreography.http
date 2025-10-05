@@ -1,6 +1,9 @@
 @SagaDesignPattern_Choreography_HostAddress = http://localhost:5222
 
-GET {{SagaDesignPattern_Choreography_HostAddress}}/weatherforecast/
+POST {{SagaDesignPattern_Choreography_HostAddress}}/api/orders/
 Accept: application/json
-
+Body:{
+    "Amount":1200,
+    "CustomerEmail": "aminul.islam@gmail.com"
+}
 ###
