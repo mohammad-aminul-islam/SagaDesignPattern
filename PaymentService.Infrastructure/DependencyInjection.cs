@@ -25,6 +25,7 @@ public static class DependencyInjection
         // MassTransit with RabbitMQ
         services.AddMassTransit(x =>
         {
+            x.SetKebabCaseEndpointNameFormatter();
             // Add consumers here if this service consumes any events
              x.AddConsumer<OrderCreatedConsumer>();
 
@@ -35,12 +36,13 @@ public static class DependencyInjection
                     h.Username(configuration["RabbitMq:Username"]);
                     h.Password(configuration["RabbitMq:Password"]);
                 });
+                cfg.ConfigureEndpoints(context);
+                //cfg.ReceiveEndpoint("order_created_queue", e =>
+                //{
+                //    e.ConfigureConsumer<OrderCreatedConsumer>(context);
+                //    e.
+                //});
 
-                cfg.ReceiveEndpoint("order_created_queue", e =>
-                {
-                    e.ConfigureConsumer<OrderCreatedConsumer>(context);
-                });
-               
             });
         });
 

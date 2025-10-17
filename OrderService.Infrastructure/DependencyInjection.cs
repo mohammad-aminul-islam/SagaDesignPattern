@@ -25,8 +25,10 @@ public static class DependencyInjection
         // MassTransit with RabbitMQ
         services.AddMassTransit(x =>
         {
+            x.SetKebabCaseEndpointNameFormatter();
+
             // Add consumers here if this service consumes any events
-             x.AddConsumer<PaymentFailedConsumer>();
+            x.AddConsumer<PaymentFailedConsumer>();
 
             x.UsingRabbitMq((context, cfg) =>
             {
@@ -36,11 +38,14 @@ public static class DependencyInjection
                     h.Password(configuration["RabbitMq:Password"]);
                 });
 
-                cfg.ReceiveEndpoint("payment_failed_queue", e =>
-                {
-                    e.ConfigureConsumer<PaymentFailedConsumer>(context);
-                });
-              
+                //auto-creates queues per consumer
+                cfg.ConfigureEndpoints(context);
+
+                //cfg.ReceiveEndpoint("payment_failed_queue", e =>
+                //{
+                //    e.ConfigureConsumer<PaymentFailedConsumer>(context);
+                //});
+
             });
         });
 
